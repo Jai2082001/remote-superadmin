@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { MongoClient } from 'mongodb';
 import { NextResponse } from 'next/server';
 
@@ -24,9 +23,12 @@ const createDatabase = async (name, email, phone) => {
         await client.close();
         return uri;
     } catch (error) {
+        console.log(error);
         throw new Error(`Error creating database: ${error.message}`);
     }
 };
+
+
 
 // API route handler
 export async function POST(req) {
@@ -40,32 +42,26 @@ export async function POST(req) {
     }
 
     try {
-        // Step 1: Create a new user for the database
-        //   const userResponse = await createDatabaseUser(username, password, dbName);
-
-        // Step 2: Create the database and insert data
         const uri = await createDatabase(name, email, phone);
-
-        fetch('http://localhost:3000/api/create-backend', {
+        // return new Response(JSON.stringify({message: 'n'}), {status: 200})
+        const response = await fetch('http://localhost:3000/api/create-backend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ resname: name, dburl: uri })
-        }).then((response) => {
-            return response.json()
-        }).then((response) => {
-            console.log(response)
+        });
 
-            return new Response(
-                JSON.stringify({
-                    message: 'Database created successfully',
-                }),
-                { status: 200 }
-            )
-        })
-            ;
+        if(!response.ok){
+            throw new Error('Failed to Fetch')
+        }else{
+            const data = await response.json();
+            console.log(data)
+
+            return new Response(JSON.stringify(data), {status: 200})
+        }
     } catch (error) {
+        console.log(error)
         return new Response(
             JSON.stringify({ error: error.message }),
             { status: 500 }

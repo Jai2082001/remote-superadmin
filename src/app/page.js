@@ -35,9 +35,9 @@ export default function Home() {
       });
       
       const data = await response.json();
-
+      console.log(data)
       if (response.ok) {
-        router.push('/restaurants'); // Redirect to restaurant list page
+        // router.push('/restaurants'); // Redirect to restaurant list page
       } else {
         setError(data.error || 'Something went wrong');
       }

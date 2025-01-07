@@ -103,10 +103,10 @@ EOT
     console.log(parsedOutputs)
     const ip = parsedOutputs[`instance_ip_${instanceName}`].value + ',';
     const ip1 = parsedOutputs[`instance_ip_${instanceName}`].value
-    const playbook_yaml_path = '/mnt/c/Projects/super-admin/superadminportal/terraform/playbook.yaml'
+    const playbook_yaml_path = '/home/jaideepaz09/remote-superadmin/terraform/playbook.yaml'
     const playbook_logs = path.join(process.cwd(), "terraform", `latestplaybook.txt`)
 
-    const ansible_command = `wsl ansible-playbook -i "${ip}" -u jaideepaz09 -vvv `+playbook_yaml_path+ ` -e "DBURL=${dburl} ipaddr=${ip1}"` ;
+    const ansible_command = `ansible-playbook -i "${ip}" -u jaideepaz09 -vvv `+playbook_yaml_path+ ` -e "DBURL=${dburl} ipaddr=${ip1}"` ;
     console.log('the command is', ansible_command)
     const response = await execPromise(ansible_command)
     console.log(response)
