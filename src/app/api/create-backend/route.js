@@ -106,11 +106,10 @@ EOT
     const playbook_yaml_path = '/mnt/c/Projects/super-admin/superadminportal/terraform/playbook.yaml'
     const playbook_logs = path.join(process.cwd(), "terraform", `latestplaybook.txt`)
 
-    const ansible_command = `wsl ansible-playbook -i ${ip} -u jaideepaz09 -vvv `+playbook_yaml_path+ ` -e "DBURL=${dburl} ipaddr=${ip1}"` ;
+    const ansible_command = `wsl ansible-playbook -i "${ip}" -u jaideepaz09 -vvv `+playbook_yaml_path+ ` -e "DBURL=${dburl} ipaddr=${ip1}"` ;
     console.log('the command is', ansible_command)
     const response = await execPromise(ansible_command)
     console.log(response)
-    
     fs.appendFileSync(playbook_logs, response.stderr)
     
     return NextResponse.json({
